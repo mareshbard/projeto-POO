@@ -1,6 +1,7 @@
 package classes;
+import java.io.Serializable;
 
-public class Animal{
+public class Animal implements Serializable{
     public int id;
     public String nome;
     public void mostrarDados(){
