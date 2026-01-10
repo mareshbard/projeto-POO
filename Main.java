@@ -10,63 +10,59 @@ public class Main
 	public static void main(String[] args) {
 
 	//criando dados iniciais
-		Gato g1 = new Gato(1, "Dan");
-		Consulta c2 = new Consulta("10h", "Vacinação Antirábica", 2);
-		Veterinario v2 = new Veterinario("Amanda A", "Vacinação", c2);
 		int qtdAnimais;
 		int qtdFuncionarios;
 
+
 		//criando listas para salvar os objetos
-		Funcionario[] listaFuncionarios = {v2};
-		Animal[] lista = {new Gato(1, "Dono")};
+		Veterinario[] listaVeterinarios = GerenciarArquivos.carregarVeterinarios();
+		Animal[] lista = GerenciarArquivos.carregarAnimais();
 
 		//verificando se já existe os arquivos
-		
-		File arquivo = new File("funcionarios.dat");
-    try{
-        if(arquivo.createNewFile()){
-            System.out.println("Arquivo criado");
-			GerenciarArquivos.salvarFuncionarios(listaFuncionarios);
-			qtdFuncionarios = 0;
-        } else{
-            System.out.println("Arquivo já existe");
-			listaFuncionarios = GerenciarArquivos.carregarFuncionarios();
-			qtdFuncionarios = listaFuncionarios.length;
-        }
-    } catch (IOException e){
-        System.out.println("Um erro ocorreu: ");
-        e.printStackTrace();
-    }
-
-	arquivo = new File("animais.dat");
-    try{
-        if(arquivo.createNewFile()){
-            System.out.println("Arquivo criado");
+	
+        if(listaVeterinarios.length == 0){
+			Consulta c2 = new Consulta("10h", "Vacinação Antirrábica", 2);
+			Veterinario v2 = new Veterinario("Amanda A", "Vacinação", c2);
+			listaVeterinarios = GerenciarArquivos.appendFunc(listaVeterinarios, v2);
+			qtdFuncionarios = 1;
+			GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
+        } 
+		if(lista.length == 0){
+			
+			Gato g1 = new Gato(1, "Dan", "Sissi", "Siames");
+			g1.mostrarDados();
+			lista = GerenciarArquivos.append(lista, g1);
+			qtdAnimais = 0;
 			GerenciarArquivos.salvarDados(lista);
-			qtdAnimais = 1;
-        } else{
-            System.out.println("Arquivo já existe");
-			lista = GerenciarArquivos.carregarAnimais();
-			qtdAnimais = lista.length;
-        }
-    } catch (IOException e){
-        System.out.println("Um erro ocorreu: ");
-        e.printStackTrace();
-    }
+			
+		}
+        lista[0].mostrarDados();
 
 
+
+		Consulta c1 = new Consulta("10h", "Vacinação Antirábica", 1);
+		Consulta c2 = new Consulta("10h", "Vacinação Antirábica", 2);
+		//funções que devem ser usadas nas funcoes de criar animais:
+		if(listaVeterinarios.length > 0){
+			
+			listaVeterinarios[0].consultas = Consulta.appendConsultas(listaVeterinarios[0].consultas, c1);
+			listaVeterinarios[0].consultas = Consulta.appendConsultas(listaVeterinarios[0].consultas, c2);
+		}
+		listaVeterinarios[0].mostrarAgenda();
 
 
 		
-		//funções que devem ser usadas nas funcoes de criar animais:
-		lista = GerenciarArquivos.append(lista, new Gato(4, "Dell"));
-		lista = GerenciarArquivos.append(lista, new Gato(5, "Steph"));
-		System.out.println("Gato: "+ lista[0].id);
+		
+		lista = GerenciarArquivos.append(lista, new Gato(4, "Dell", "Lana", "Siames"));
+		lista = GerenciarArquivos.append(lista, new Cachorro(5, "Cas", "Andor", "Labrador"));
+		for(int i=0; i<lista.length; i++){
+			lista[i].mostrarDados();
+		}
 		GerenciarArquivos.salvarDados(lista);
 		//para criar vet tem que ter uma CONSULTA
-		Consulta c1 = new Consulta("10h", "Vacinação Antirábica", 1);
+
 		Veterinario v1 = new Veterinario("Amanda A", "Vacinação", c1);
 		v1.mostrarAgenda();
-		GerenciarArquivos.salvarFuncionarios(listaFuncionarios);
+		GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
 	}
 }

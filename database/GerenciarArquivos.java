@@ -3,7 +3,8 @@ import classes.*;
 import java.io.*;
 import java.util.*;
 
-import atendimento.Funcionario;
+import atendimento.Veterinario;
+import atendimento.Veterinario;
 
 public class GerenciarArquivos{
     public static void salvarDados(Animal[] animais){
@@ -21,7 +22,7 @@ public static Animal[] carregarAnimais(){
         return (Animal[]) ois.readObject();
     } catch(IOException | ClassNotFoundException e){
         e.printStackTrace();
-        return null;
+        return new Animal[0];
     }
 }
 
@@ -30,27 +31,27 @@ public static Animal[ ] append(Animal[] oldArr, Animal novoAnimal){
     newArr[newArr.length - 1] = novoAnimal;
     return newArr;
 }
-public static Funcionario[ ] appendFunc(Funcionario[] oldArr, Funcionario novoFunc){
-    Funcionario[] newArr = Arrays.copyOf(oldArr, oldArr.length+1);
+public static Veterinario[ ] appendFunc(Veterinario[] oldArr, Veterinario novoFunc){
+    Veterinario[] newArr = Arrays.copyOf(oldArr, oldArr.length+1);
     newArr[newArr.length - 1] = novoFunc;
     return newArr;
 }
 
-public static void salvarFuncionarios(Funcionario[] funcionarios){
-  try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("funcionarios.dat"))){
-            oos.writeObject(funcionarios);
+public static void salvarVeterinarios(Veterinario[] Veterinarios){
+  try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("veterinarios.dat"))){
+            oos.writeObject(Veterinarios);
             System.out.println("Dados salvos!");
         } catch (IOException e){
             e.printStackTrace();
         }
     }
 
-public static Funcionario[] carregarFuncionarios(){
-    try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream("funcionarios.dat"))){
-        return (Funcionario[]) ois.readObject();
+public static Veterinario[] carregarVeterinarios(){
+    try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream("veterinarios.dat"))){
+        return (Veterinario[]) ois.readObject();
     } catch(IOException | ClassNotFoundException e){
         e.printStackTrace();
-        return null;
+        return new Veterinario[0];
     }
 }
 }

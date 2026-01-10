@@ -12,7 +12,7 @@ public class Consulta implements Serializable{
         this.descricao = descricao;
         this.idAnimal = id;
     }
-    public static Consulta[ ] append(Consulta[] oldArr, Consulta novaConsulta){
+    public static Consulta[] appendConsultas(Consulta[] oldArr, Consulta novaConsulta){
     Consulta[] newArr = Arrays.copyOf(oldArr, oldArr.length+1);
     newArr[newArr.length - 1] = novaConsulta;
     return newArr;
