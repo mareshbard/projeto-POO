@@ -1,5 +1,6 @@
+package classes;
+
 public class Gato extends Animal{
-    String raca;
     public Gato(int id, String nome){
         super(id, nome);
     }

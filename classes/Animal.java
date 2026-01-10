@@ -1,3 +1,5 @@
+package classes;
+
 public class Animal{
     public int id;
     public String nome;
