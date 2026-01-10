@@ -4,7 +4,7 @@
 ## 🐰 CHECKLIST:
 
 - Criar menus
-    - Menu para adicionar, remover, editar, ver pets
+    - Menu para adicionar, remover, editar, ver pets ☑️
     - Menu de atendimento (vacinação, consulta regular)
     - Menu CRUD para funcionários
 - Fazer funções dos funcionários
