@@ -11,6 +11,6 @@
     - Iniciar atendimento
     - Fazer consulta
     - Aplicar vacinas
-- Adicionar funções para salvar animais cadastrados em arquivos
-- Adicionar funções para ler dados salvos em arquivos
+- Adicionar funções para salvar animais cadastrados em arquivos ☑️
+- Adicionar funções para ler dados salvos em arquivos ☑️
 - Adicionar tratamento de exceções
