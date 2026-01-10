@@ -17,5 +17,6 @@
     - Excluir
     - Ver todos os animais
 - Adicionar funções para salvar animais cadastrados em arquivos ☑️
+- Adicionar funções para salvar funcionários cadastrados em arquivos ☑️
 - Adicionar funções para ler dados salvos em arquivos ☑️
 - Adicionar tratamento de exceções
