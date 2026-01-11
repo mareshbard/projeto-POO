@@ -1,6 +1,10 @@
+package classes;
+
 public class Coelho extends Animal {
-    public Coelho(int id, String nome) {
-        super(id, nome, "Coelho");
+    public String raca;
+    public Coelho(int id, String nome, String raca, String dono) {
+        super(id, nome, dono, "Coelho");
+        this.raca = raca;
     }
 
     public void pular() {
@@ -9,7 +13,7 @@ public class Coelho extends Animal {
 
     @Override
     public void mostrar() {
-        System.out.println("ID: " + getId() + " | Nome: " + getNome() + " | Espécie: " + getEspecie() + " (Coelho)");
+        System.out.println("ID: " + getId() + " | Nome: " + getNome() + " | Dono: " + getDono());
     }
 }
 

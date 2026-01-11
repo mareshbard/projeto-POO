@@ -1,13 +1,81 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import classes.*;
+import atendimento.*;
+import database.GerenciarArquivos;
+
+
 
 public class MenuPet {
 
-    private Scanner in = new Scanner(System.in);
-    private ArrayList<Animal> animais = new ArrayList<>();
+
+
+    		//criando listas para salvar os objetos
+		Veterinario[] listaVeterinarios = GerenciarArquivos.carregarVeterinarios();
+		Animal[] lista = GerenciarArquivos.carregarAnimais();
+	
+    public Scanner in = new Scanner(System.in);
+    public ArrayList<Animal> animais = new ArrayList<>();
     private int idAuto = 1;
 
     public void iniciar() {
+
+
+
+        int qtdAnimais;
+		int qtdFuncionarios;
+
+
+
+
+		//verificando se já existe os arquivos
+	
+        if(listaVeterinarios.length == 0){
+			Consulta c2 = new Consulta("10h", "Vacinação Antirrábica", 2);
+			Veterinario v2 = new Veterinario("Amanda A", "Vacinação", c2);
+			listaVeterinarios = GerenciarArquivos.appendFunc(listaVeterinarios, v2);
+			qtdFuncionarios = 1;
+			GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
+        } 
+		if(lista.length == 0){
+			
+			Gato g1 = new Gato(1, "Dan", "Sissi", "Siames");
+			g1.mostrarDados();
+			lista = GerenciarArquivos.append(lista, g1);
+			qtdAnimais = 0;
+			GerenciarArquivos.salvarDados(lista);
+			
+		}
+        lista[0].mostrarDados();
+
+
+
+		Consulta c1 = new Consulta("10h", "Vacinação Antirábica", 1);
+		Consulta c2 = new Consulta("10h", "Vacinação Antirábica", 2);
+		//funções que devem ser usadas nas funcoes de criar animais:
+		if(listaVeterinarios.length > 0){
+			
+			listaVeterinarios[0].consultas = Consulta.appendConsultas(listaVeterinarios[0].consultas, c1);
+			listaVeterinarios[0].consultas = Consulta.appendConsultas(listaVeterinarios[0].consultas, c2);
+		}
+		listaVeterinarios[0].mostrarAgenda();
+
+
+		
+		
+		lista = GerenciarArquivos.append(lista, new Gato(4, "Dell", "Lana", "Siames"));
+		lista = GerenciarArquivos.append(lista, new Cachorro(5, "Cas", "Andor", "Labrador"));
+		for(int i=0; i<lista.length; i++){
+			lista[i].mostrarDados();
+		}
+		GerenciarArquivos.salvarDados(lista);
+		//para criar vet tem que ter uma CONSULTA
+
+		Veterinario v1 = new Veterinario("Amanda A", "Vacinação", c1);
+		v1.mostrarAgenda();
+		GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
+
+	
         int opcao;
 
         do {
@@ -33,8 +101,6 @@ public class MenuPet {
 
     // Método criarAnimal atualizado com subclasses 
     private Animal criarAnimal() {
-        System.out.print("Nome do animal: ");
-        String nome = in.nextLine();
 
         System.out.println("\n--- ESPÉCIE ---");
         System.out.println("1 - Cachorro");
@@ -45,15 +111,29 @@ public class MenuPet {
 
         int op = in.nextInt();
         in.nextLine();
+                System.out.print("Nome do animal: ");
+                String nomeAnimal = in.nextLine();
+                System.out.print("Dono: ");
+                String donoAnimal = in.nextLine();
+                System.out.print("Raça/Cor do animal: ");
+                String racaAnimal = in.nextLine();
 
         switch(op) {
-            case 1: return new Cachorro(idAuto++, nome);
-            case 2: return new Gato(idAuto++, nome);
-            case 3: return new Coelho(idAuto++, nome);
+            case 1:
+                
+                return new Cachorro(idAuto++, nomeAnimal, donoAnimal, racaAnimal);
+            case 2: 
+                Gato g2 = new Gato(idAuto++, nomeAnimal, donoAnimal, racaAnimal);
+                lista = GerenciarArquivos.append(lista, g2);
+                return g2;
+            case 3: 
+                
+                return new Coelho(idAuto++, nomeAnimal, donoAnimal, racaAnimal);
             case 4:
                 System.out.print("Digite a espécie: ");
-                String especie = in.nextLine();
-                return new Animal(idAuto++, nome, especie);
+                String especieAnimal = in.nextLine();
+                
+                return new Animal(idAuto++, nomeAnimal, donoAnimal, especieAnimal);
             default:
                 System.out.println("Opção inválida!");
                 return null;
