@@ -11,12 +11,28 @@
     - Iniciar atendimento
     - Fazer consulta
     - Aplicar vacinas
-- Fazer funções dos animais
-    - Criar animais
-    - Editar nome, cor
-    - Excluir
-    - Ver todos os animais
+- Fazer funções dos animais ☑️
+    - Criar animais ☑️
+    - Editar nome, cor ☑️
+    - Excluir ☑️
+    - Ver por ID ☑️
 - Adicionar funções para salvar animais cadastrados em arquivos ☑️
 - Adicionar funções para salvar funcionários cadastrados em arquivos ☑️
 - Adicionar funções para ler dados salvos em arquivos ☑️
-- Adicionar tratamento de exceções
+- Adicionar tratamento de exceções ☑️
+
+## 🐦 CONCEITOS UTILIZADOS:
+- Polimorfismo
+- Abstração
+- Herança
+- Encapsulamento
+- Exceções
+- Manipulação de arquivos
+
+## 🐠 EQUIPE:
+
+✦ [Leticia Gomes](https://github.com/mareshbard)
+
+✦ [Rebeca Tavares](https://github.com/RebecaTavaress)
+
+✦ [Giovana Joice](https://github.com/GiovanaJoice)
