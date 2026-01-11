@@ -4,11 +4,7 @@ import classes.*;
 import atendimento.*;
 import database.GerenciarArquivos;
 
-
-
 public class MenuPet {
-
-
 
     		//criando listas para salvar os objetos
 		Veterinario[] listaVeterinarios = GerenciarArquivos.carregarVeterinarios();
@@ -20,16 +16,9 @@ public class MenuPet {
 
     public void iniciar() {
 
-
-
         int qtdAnimais;
 		int qtdFuncionarios;
-
-
-
-
-		//verificando se já existe os arquivos
-	
+		
         if(listaVeterinarios.length == 0){
 			Consulta c2 = new Consulta("10h", "Vacinação Antirrábica", 2);
 			Veterinario v2 = new Veterinario("Amanda A", "Vacinação", c2);
@@ -44,57 +33,62 @@ public class MenuPet {
 			lista = GerenciarArquivos.append(lista, g1);
 			qtdAnimais = 0;
 			GerenciarArquivos.salvarDados(lista);
-			
 		}
         lista[0].mostrarDados();
 
-
-
 		Consulta c1 = new Consulta("10h", "Vacinação Antirábica", 1);
 		Consulta c2 = new Consulta("10h", "Vacinação Antirábica", 2);
-		//funções que devem ser usadas nas funcoes de criar animais:
 		if(listaVeterinarios.length > 0){
 			
 			listaVeterinarios[0].consultas = Consulta.appendConsultas(listaVeterinarios[0].consultas, c1);
 			listaVeterinarios[0].consultas = Consulta.appendConsultas(listaVeterinarios[0].consultas, c2);
 		}
 		listaVeterinarios[0].mostrarAgenda();
-
-
-		
-		
 		lista = GerenciarArquivos.append(lista, new Gato(4, "Dell", "Lana", "Siames"));
 		lista = GerenciarArquivos.append(lista, new Cachorro(5, "Cas", "Andor", "Labrador"));
 		for(int i=0; i<lista.length; i++){
 			lista[i].mostrarDados();
 		}
 		GerenciarArquivos.salvarDados(lista);
-		//para criar vet tem que ter uma CONSULTA
 
 		Veterinario v1 = new Veterinario("Amanda A", "Vacinação", c1);
 		v1.mostrarAgenda();
 		GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
-
 	
         int opcao;
 
         do {
             System.out.println("\n--- MENU PRINCIPAL ---");
             System.out.println("1 - Criar cadastro do meu pet");
+            System.out.println("2 - Cadastro de funcionários"); 
+            System.out.println("3 - Agendar consulta");
             System.out.println("0 - Sair");
             System.out.print("Opção: ");
             opcao = in.nextInt();
             in.nextLine();
 
-            if(opcao == 1) {
-                Animal novo = criarAnimal();
-                if(novo != null) {
-                    animais.add(novo);
-                    System.out.println("\nCadastro criado com sucesso!");
-                    novo.mostrar(); // Mostra no formato "--- PET ---"
-                    menuAposCadastro(novo);
-                }
+            switch(opcao) {
+        case 1:
+            Animal novo = criarAnimal();
+            if(novo != null) {
+                animais.add(novo);
+                System.out.println("\nCadastro criado com sucesso!");
+                novo.mostrar();
+                menuAposCadastro(novo);
             }
+            break;
+        case 2:
+            menuFuncionario(); 
+            break;
+        case 3:
+            agendarConsulta(); 
+            break;
+        case 0:
+            System.out.println("Saindo e salvando dados...");
+            GerenciarArquivos.salvarDados(lista);
+            GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
+            break;
+    }
 
         } while(opcao != 0);
     }
@@ -180,7 +174,7 @@ public class MenuPet {
                     System.out.print("Novo nome: ");
                     animal.setNome(in.nextLine());
                     System.out.println("\nAnimal atualizado!");
-                    animal.mostrar(); // Mostra cadastro atualizado
+                    animal.mostrar();
                     break;
 
                 case 2:
@@ -207,7 +201,7 @@ public class MenuPet {
                     }
 
                     System.out.println("\nAnimal atualizado!");
-                    animal.mostrar(); // Mostra cadastro atualizado
+                    animal.mostrar();
                     break;
 
                 case 0:
@@ -240,9 +234,60 @@ public class MenuPet {
         }
 
         if (encontrado != null) {
-            encontrado.mostrar(); // Sempre mostra no formato "--- PET ---"
+            encontrado.mostrar();
         } else {
             System.out.println("Animal não encontrado!");
+        }
+    }
+
+    private void menuFuncionario() {
+        System.out.println("\n--- CADASTRO DE FUNCIONÁRIOS ---");
+        System.out.print("Nome do Veterinário: ");
+        String nome = in.nextLine();
+        System.out.print("Especialidade: ");
+        String espec = in.nextLine();
+
+        Consulta c = new Consulta("00:00", "Disponível", 0);
+        Veterinario novoVet = new Veterinario(nome, espec, c);
+
+        listaVeterinarios = GerenciarArquivos.appendFunc(listaVeterinarios, novoVet);
+        GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
+        
+        System.out.println("Funcionário cadastrado com sucesso!");
+    }
+
+    private void agendarConsulta() {
+        System.out.println("\n--- AGENDAR ATENDIMENTO ---");
+        System.out.print("Digite o ID do Pet: ");
+        int idPet = in.nextInt();
+        in.nextLine();
+
+        Animal petEncontrado = null;
+        for (Animal a : lista) { 
+            if (a != null && a.getId() == idPet) {
+                petEncontrado = a;
+                break;
+            }
+        }
+
+        if (petEncontrado == null) {
+            System.out.println("Erro: Pet não encontrado!");
+            return;
+        }
+
+        System.out.print("Data/Hora da Consulta: ");
+        String data = in.nextLine();
+        System.out.print("Descrição (ex: Vacina ou Consulta): ");
+        String desc = in.nextLine();
+
+        Consulta nova = new Consulta(data, desc, petEncontrado.getId());
+
+        if (listaVeterinarios != null && listaVeterinarios.length > 0) {
+            listaVeterinarios[0].consultas = Consulta.appendConsultas(listaVeterinarios[0].consultas, nova);
+            GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
+            System.out.println("Consulta de " + petEncontrado.getNome() + " agendada com sucesso!");
+        } else {
+            System.out.println("Erro: Cadastre um funcionário primeiro!");
         }
     }
 }
