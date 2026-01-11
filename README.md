@@ -35,7 +35,7 @@
 
 ✦ [Rebeca Tavares](https://github.com/RebecaTavaress)
 
-✦ [Giovana Joice](https://github.com/GiovanaJoice)
+✦ [GiovanNa Joice](https://github.com/GiovanaJoice)
 
 ## 🦜 FERRAMENTAS UTILIZADAS:
 - Java
