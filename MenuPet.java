@@ -39,14 +39,15 @@ public class MenuPet {
         } 
 		if(lista.length == 0){
 			
-			Gato g1 = new Gato(1, "Dan", "Sissi", "Siames");
-			g1.mostrarDados();
-			lista = GerenciarArquivos.append(lista, g1);
-			qtdAnimais = 0;
-			GerenciarArquivos.salvarDados(lista);
+            Gato g1 = new Gato(1, "Dan", "Sissi", "Siames");
+            g1.mostrar();
+            lista = GerenciarArquivos.append(lista, g1);
+            qtdAnimais = 0;
+            GerenciarArquivos.salvarDados(lista);
+			
 			
 		}
-        lista[0].mostrarDados();
+        lista[0].mostrar();
 
 
 
@@ -66,7 +67,7 @@ public class MenuPet {
 		lista = GerenciarArquivos.append(lista, new Gato(4, "Dell", "Lana", "Siames"));
 		lista = GerenciarArquivos.append(lista, new Cachorro(5, "Cas", "Andor", "Labrador"));
 		for(int i=0; i<lista.length; i++){
-			lista[i].mostrarDados();
+			lista[i].mostrar();
 		}
 		GerenciarArquivos.salvarDados(lista);
 		//para criar vet tem que ter uma CONSULTA

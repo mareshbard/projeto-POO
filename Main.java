@@ -5,9 +5,11 @@ import java.util.*;
 import java.io.File;
 import java.io.IOException;
 
-public class Main
-{
+public class Main{
 	public static void main(String[] args) {
+
+    MenuPet menu = new MenuPet();
+    menu.iniciar();
 
 	//criando dados iniciais
 		int qtdAnimais;
@@ -36,7 +38,7 @@ public class Main
 			GerenciarArquivos.salvarDados(lista);
 			
 		}
-        lista[0].mostrarDados();
+        lista[0].mostrar();
 
 
 
@@ -56,7 +58,7 @@ public class Main
 		lista = GerenciarArquivos.append(lista, new Gato(4, "Dell", "Lana", "Siames"));
 		lista = GerenciarArquivos.append(lista, new Cachorro(5, "Cas", "Andor", "Labrador"));
 		for(int i=0; i<lista.length; i++){
-			lista[i].mostrarDados();
+			lista[i].mostrar();
 		}
 		GerenciarArquivos.salvarDados(lista);
 		//para criar vet tem que ter uma CONSULTA
