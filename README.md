@@ -1,4 +1,4 @@
-# 😺 PETCARE 🐶
+# 😺 PETCARE (2026) 🐶
 ### Trabalho final da disciplina de Programação Orientada a Objetos
 
 ## 🐰 CHECKLIST:
@@ -36,3 +36,8 @@
 ✦ [Rebeca Tavares](https://github.com/RebecaTavaress)
 
 ✦ [Giovana Joice](https://github.com/GiovanaJoice)
+
+## 🦜 FERRAMENTAS UTILIZADAS:
+- Java
+- Github Codespaces
+- Git
