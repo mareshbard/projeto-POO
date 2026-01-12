@@ -1,8 +1,34 @@
 package produtos;
 
-public interface Produto {
-    double preco();
-    String descricao();
-    String nome();
-    public void mostrarDetalhes();
+public class Produto {
+    private String nome;
+    private String descricao;
+    private double preco;
+    private int quantidade;
+
+    public Produto(String nome, String descricao, double preco, int quantidade) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.preco = preco;
+        this.quantidade = quantidade;
+    }
+    public String getNome() {
+        return nome;
+    }
+    public String getDescricao() {
+        return descricao;
+    }
+    public double getPreco() {
+        return preco;
+    }
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void mostrarDetalhes() {
+        System.out.println("Nome: " + getNome());
+        System.out.println("Descrição: " + getDescricao());
+        System.out.println("Preço: " + getPreco());
+        System.out.println("Quantidade em Estoque: " + getQuantidade());
+    }
 }
