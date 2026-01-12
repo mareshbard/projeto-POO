@@ -6,288 +6,183 @@ import database.GerenciarArquivos;
 
 public class MenuPet {
 
-    		//criando listas para salvar os objetos
-		Veterinario[] listaVeterinarios = GerenciarArquivos.carregarVeterinarios();
-		Animal[] lista = GerenciarArquivos.carregarAnimais();
-	
+    Veterinario[] listaVeterinarios = GerenciarArquivos.carregarVeterinarios();
+    Animal[] lista = GerenciarArquivos.carregarAnimais();
+    
     public Scanner in = new Scanner(System.in);
-    public ArrayList<Animal> animais = new ArrayList<>();
     private int idAuto = 1;
 
     public void iniciar() {
+        if(listaVeterinarios == null || listaVeterinarios.length == 0){
+            Consulta c_inicial = new Consulta("10h", "Vacinação Antirrábica", 0);
+            Veterinario v_inicial = new Veterinario("Dra. Amanda", "Clínica Geral", c_inicial);
+            listaVeterinarios = new Veterinario[]{v_inicial};
+            GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
+        }
 
-        int qtdAnimais;
-		int qtdFuncionarios;
-		
-        if(listaVeterinarios.length == 0){
-			Consulta c2 = new Consulta("10h", "Vacinação Antirrábica", 2);
-			Veterinario v2 = new Veterinario("Amanda A", "Vacinação", c2);
-			listaVeterinarios = GerenciarArquivos.appendFunc(listaVeterinarios, v2);
-			qtdFuncionarios = 1;
-			GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
-        } 
-		if(lista.length == 0){
-			
-			Gato g1 = new Gato(1, "Dan", "Sissi", "Siames");
-			g1.mostrarDados();
-			lista = GerenciarArquivos.append(lista, g1);
-			qtdAnimais = 0;
-			GerenciarArquivos.salvarDados(lista);
-		}
-        lista[0].mostrarDados();
-
-		Consulta c1 = new Consulta("10h", "Vacinação Antirábica", 1);
-		Consulta c2 = new Consulta("10h", "Vacinação Antirábica", 2);
-		if(listaVeterinarios.length > 0){
-			
-			listaVeterinarios[0].consultas = Consulta.appendConsultas(listaVeterinarios[0].consultas, c1);
-			listaVeterinarios[0].consultas = Consulta.appendConsultas(listaVeterinarios[0].consultas, c2);
-		}
-		listaVeterinarios[0].mostrarAgenda();
-		lista = GerenciarArquivos.append(lista, new Gato(4, "Dell", "Lana", "Siames"));
-		lista = GerenciarArquivos.append(lista, new Cachorro(5, "Cas", "Andor", "Labrador"));
-		for(int i=0; i<lista.length; i++){
-			lista[i].mostrarDados();
-		}
-		GerenciarArquivos.salvarDados(lista);
-
-		Veterinario v1 = new Veterinario("Amanda A", "Vacinação", c1);
-		v1.mostrarAgenda();
-		GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
-	
-        int opcao;
-
+        int perfil;
         do {
-            System.out.println("\n--- MENU PRINCIPAL ---");
-            System.out.println("1 - Criar cadastro do meu pet");
-            System.out.println("2 - Cadastro de funcionários"); 
-            System.out.println("3 - Agendar consulta");
+            System.out.println("\n=== PETCARE 2026 - ACESSO ===");
+            System.out.println("1 - Sou Balconista");
+            System.out.println("2 - Sou Veterinário");
             System.out.println("0 - Sair");
+            System.out.print("Escolha seu perfil: ");
+            perfil = in.nextInt();
+            in.nextLine();
+
+            switch(perfil) {
+                case 1: menuBalconista(); break;
+                case 2: menuVeterinario(); break;
+                case 0: 
+                    System.out.println("Salvando dados e encerrando...");
+                    GerenciarArquivos.salvarDados(lista);
+                    GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
+                    break;
+                default: System.out.println("Opção inválida!");
+            }
+        } while(perfil != 0);
+    }
+
+    // perfil do balconista
+    private void menuBalconista() {
+        int opcao;
+        do {
+            System.out.println("\n--- MENU BALCONISTA (LOGÍSTICA) ---");
+            System.out.println("1 - Criar cadastro de Pet");
+            System.out.println("2 - Cadastrar Funcionário (Vet)");
+            System.out.println("3 - Agendar Consulta");
+            System.out.println("0 - Voltar");
             System.out.print("Opção: ");
             opcao = in.nextInt();
             in.nextLine();
 
             switch(opcao) {
-        case 1:
-            Animal novo = criarAnimal();
-            if(novo != null) {
-                animais.add(novo);
-                System.out.println("\nCadastro criado com sucesso!");
-                novo.mostrar();
-                menuAposCadastro(novo);
+                case 1:
+                    Animal novo = criarAnimal();
+                    if(novo != null) {
+                        lista = GerenciarArquivos.append(lista, novo);
+                        System.out.println("Pet cadastrado com sucesso!");
+                    }
+                    break;
+                case 2: menuCadastroFuncionario(); break;
+                case 3: agendarConsulta(); break;
             }
-            break;
-        case 2:
-            menuFuncionario(); 
-            break;
-        case 3:
-            agendarConsulta(); 
-            break;
-        case 0:
-            System.out.println("Saindo e salvando dados...");
-            GerenciarArquivos.salvarDados(lista);
-            GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
-            break;
-    }
-
         } while(opcao != 0);
     }
 
-    // Método criarAnimal atualizado com subclasses 
-    private Animal criarAnimal() {
-
-        System.out.println("\n--- ESPÉCIE ---");
-        System.out.println("1 - Cachorro");
-        System.out.println("2 - Gato");
-        System.out.println("3 - Coelho");
-        System.out.println("4 - Outro");
-        System.out.print("Opção: ");
-
-        int op = in.nextInt();
-        in.nextLine();
-                System.out.print("Nome do animal: ");
-                String nomeAnimal = in.nextLine();
-                System.out.print("Dono: ");
-                String donoAnimal = in.nextLine();
-                System.out.print("Raça/Cor do animal: ");
-                String racaAnimal = in.nextLine();
-
-        switch(op) {
-            case 1:
-                
-                return new Cachorro(idAuto++, nomeAnimal, donoAnimal, racaAnimal);
-            case 2: 
-                Gato g2 = new Gato(idAuto++, nomeAnimal, donoAnimal, racaAnimal);
-                lista = GerenciarArquivos.append(lista, g2);
-                return g2;
-            case 3: 
-                
-                return new Coelho(idAuto++, nomeAnimal, donoAnimal, racaAnimal);
-            case 4:
-                System.out.print("Digite a espécie: ");
-                String especieAnimal = in.nextLine();
-                
-                return new Animal(idAuto++, nomeAnimal, donoAnimal, especieAnimal);
-            default:
-                System.out.println("Opção inválida!");
-                return null;
+    //perfil do vet
+    private void menuVeterinario() {
+        if (listaVeterinarios.length == 0) {
+            System.out.println("Nenhum veterinário cadastrado!");
+            return;
         }
-    }
 
-    private void menuAposCadastro(Animal animal) {
+        System.out.println("\n--- SELECIONE SEU USUÁRIO ---");
+        for (int i = 0; i < listaVeterinarios.length; i++) {
+            System.out.println(i + " - " + listaVeterinarios[i].getNome());
+        }
+        System.out.print("Escolha: ");
+        int index = in.nextInt();
+        in.nextLine();
+
+        if (index < 0 || index >= listaVeterinarios.length) {
+            System.out.println("Veterinário inválido.");
+            return;
+        }
+
+        Veterinario vetAtual = listaVeterinarios[index];
         int op;
-
         do {
-            System.out.println("\n--- CADASTRO ---");
-            System.out.println("1 - Editar");
-            System.out.println("2 - Excluir");
-            System.out.println("3 - Ver por ID");
-            System.out.println("0 - Voltar");
+            System.out.println("\n--- BEM-VINDO(A) DR(A). " + vetAtual.getNome().toUpperCase() + " ---");
+            System.out.println("1 - Ver Agenda (Consultas)");
+            System.out.println("2 - Iniciar Atendimento (Próximo da lista)");
+            System.out.println("0 - Sair do Perfil");
             System.out.print("Opção: ");
             op = in.nextInt();
             in.nextLine();
 
-            switch(op) {
-                case 1: editarAnimal(animal); break;
-                case 2: excluirAnimal(animal); return;
-                case 3: verPorId(); break;
+            if (op == 1) {
+                vetAtual.mostrarAgenda();
+            } else if (op == 2) {
+                atenderProximo(vetAtual);
             }
-
-        } while(op != 0);
-    }
-
-    private void editarAnimal(Animal animal) {
-
-        int op;
-        do {
-            System.out.println("\nO que deseja editar?");
-            System.out.println("1 - Nome");
-            System.out.println("2 - Espécie");
-            System.out.println("0 - Voltar");
-            System.out.print("Opção: ");
-
-            op = in.nextInt();
-            in.nextLine();
-
-            switch (op) {
-                case 1:
-                    System.out.print("Novo nome: ");
-                    animal.setNome(in.nextLine());
-                    System.out.println("\nAnimal atualizado!");
-                    animal.mostrar();
-                    break;
-
-                case 2:
-                    System.out.println("\nEscolha nova espécie:");
-                    System.out.println("1 - Cachorro");
-                    System.out.println("2 - Gato");
-                    System.out.println("3 - Coelho");
-                    System.out.println("4 - Outro");
-                    System.out.print("Opção: ");
-
-                    int esp = in.nextInt();
-                    in.nextLine();
-
-                    switch (esp) {
-                        case 1: animal.setEspecie("Cachorro"); break;
-                        case 2: animal.setEspecie("Gato"); break;
-                        case 3: animal.setEspecie("Coelho"); break;
-                        case 4:
-                            System.out.print("Digite a espécie: ");
-                            animal.setEspecie(in.nextLine());
-                            break;
-                        default:
-                            System.out.println("Opção inválida! Espécie não alterada.");
-                    }
-
-                    System.out.println("\nAnimal atualizado!");
-                    animal.mostrar();
-                    break;
-
-                case 0:
-                    System.out.println("Voltando...");
-                    break;
-
-                default:
-                    System.out.println("Opção inválida!");
-            }
-
         } while (op != 0);
     }
 
-    private void excluirAnimal(Animal animal) {
-        animais.remove(animal);
-        System.out.println("Animal removido!");
+    private void atenderProximo(Veterinario vet) {
+        if (vet.consultas == null || vet.consultas.length == 0) {
+            System.out.println("Não há consultas agendadas.");
+            return;
+        }
+        
+        Consulta atual = vet.consultas[0];
+        
+        System.out.println("Atendendo consulta de ID Pet: " + atual.getIdAnimal() + "..."); 
+        System.out.println("Descrição: " + atual.getDescricao());
+        
+        Consulta[] novaAgenda = new Consulta[vet.consultas.length - 1];
+        for (int i = 1; i < vet.consultas.length; i++) {
+            novaAgenda[i - 1] = vet.consultas[i];
+        }
+        vet.consultas = novaAgenda;
+
+        System.out.println("Atendimento finalizado com sucesso!");
+        GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
     }
 
-    private void verPorId() {
-        System.out.print("Digite o ID do animal: ");
-        int id = in.nextInt();
-        in.nextLine();
+    
+    private Animal criarAnimal() {
+        System.out.println("\n--- ESPÉCIE ---");
+        System.out.println("1-Cachorro \n 2-Gato \n 3-Coelho \n 4-Outro");
+        int op = in.nextInt(); in.nextLine();
+        System.out.print("Nome: "); String nome = in.nextLine();
+        System.out.print("Dono: "); String dono = in.nextLine();
+        System.out.print("Raça/Cor: "); String raca = in.nextLine();
 
-        Animal encontrado = null;
-        for (Animal a : animais) {
-            if (a.getId() == id) {
-                encontrado = a;
-                break;
-            }
-        }
-
-        if (encontrado != null) {
-            encontrado.mostrar();
-        } else {
-            System.out.println("Animal não encontrado!");
+        switch(op) {
+            case 1: return new Cachorro(idAuto++, nome, dono, raca);
+            case 2: return new Gato(idAuto++, nome, dono, raca);
+            case 3: return new Coelho(idAuto++, nome, dono, raca);
+            default: return new Animal(idAuto++, nome, dono, "Outro");
         }
     }
 
-    private void menuFuncionario() {
-        System.out.println("\n--- CADASTRO DE FUNCIONÁRIOS ---");
+    private void menuCadastroFuncionario() {
         System.out.print("Nome do Veterinário: ");
         String nome = in.nextLine();
         System.out.print("Especialidade: ");
         String espec = in.nextLine();
-
-        Consulta c = new Consulta("00:00", "Disponível", 0);
-        Veterinario novoVet = new Veterinario(nome, espec, c);
-
+        Veterinario novoVet = new Veterinario(nome, espec, null);
         listaVeterinarios = GerenciarArquivos.appendFunc(listaVeterinarios, novoVet);
-        GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
-        
-        System.out.println("Funcionário cadastrado com sucesso!");
+        System.out.println("Veterinário cadastrado!");
     }
 
     private void agendarConsulta() {
-        System.out.println("\n--- AGENDAR ATENDIMENTO ---");
-        System.out.print("Digite o ID do Pet: ");
-        int idPet = in.nextInt();
-        in.nextLine();
-
+        System.out.print("ID do Pet: ");
+        int idPet = in.nextInt(); in.nextLine();
+        
+        // Busca o pet na lista carregada
         Animal petEncontrado = null;
-        for (Animal a : lista) { 
-            if (a != null && a.getId() == idPet) {
-                petEncontrado = a;
-                break;
-            }
+        for(Animal a : lista) {
+            if(a != null && a.getId() == idPet) { petEncontrado = a; break; }
         }
 
-        if (petEncontrado == null) {
-            System.out.println("Erro: Pet não encontrado!");
+        if(petEncontrado == null) {
+            System.out.println("Pet não encontrado!");
             return;
         }
 
-        System.out.print("Data/Hora da Consulta: ");
-        String data = in.nextLine();
-        System.out.print("Descrição (ex: Vacina ou Consulta): ");
-        String desc = in.nextLine();
-
+        System.out.print("Data/Hora: "); String data = in.nextLine();
+        System.out.print("Descrição: "); String desc = in.nextLine();
         Consulta nova = new Consulta(data, desc, petEncontrado.getId());
 
-        if (listaVeterinarios != null && listaVeterinarios.length > 0) {
-            listaVeterinarios[0].consultas = Consulta.appendConsultas(listaVeterinarios[0].consultas, nova);
-            GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
-            System.out.println("Consulta de " + petEncontrado.getNome() + " agendada com sucesso!");
-        } else {
-            System.out.println("Erro: Cadastre um funcionário primeiro!");
+        System.out.println("Selecione o Veterinário para a consulta:");
+        for (int i = 0; i < listaVeterinarios.length; i++) {
+            System.out.println(i + " - " + listaVeterinarios[i].getNome());
         }
+        int vIndex = in.nextInt(); in.nextLine();
+
+        listaVeterinarios[vIndex].consultas = Consulta.appendConsultas(listaVeterinarios[vIndex].consultas, nova);
+        System.out.println("Agendado com sucesso!");
     }
 }
