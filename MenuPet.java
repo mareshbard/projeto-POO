@@ -1,14 +1,16 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 import classes.*;
 import atendimento.*;
 import database.GerenciarArquivos;
-
+import produtos.*;
 public class MenuPet {
 
-    Veterinario[] listaVeterinarios = GerenciarArquivos.carregarVeterinarios();
-    Animal[] lista = GerenciarArquivos.carregarAnimais();
-    
+
+
+
+    Veterinario[] listaVeterinarios = GerenciarArquivos.carregar("veterinarios.dat", Veterinario[].class);
+    Animal[] lista = GerenciarArquivos.carregar("animais.dat", Animal[].class);
+    Produto[] produtos = GerenciarArquivos.carregar("produtos.dat", Produto[].class);
     public Scanner in = new Scanner(System.in);
     private int idAuto = lista.length;
 
@@ -17,7 +19,7 @@ public class MenuPet {
             Consulta c_inicial = new Consulta("10h", "Vacinação Antirrábica", 0);
             Veterinario v_inicial = new Veterinario("Dra. Amanda", "Clínica Geral", c_inicial);
             listaVeterinarios = new Veterinario[]{v_inicial};
-            GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
+            GerenciarArquivos.salvar("veterinarios.dat", listaVeterinarios);
         }
 
         int perfil;
@@ -25,6 +27,7 @@ public class MenuPet {
             System.out.println("\n=== PETCARE 2026 - ACESSO ===");
             System.out.println("1 - Sou Balconista");
             System.out.println("2 - Sou Veterinário");
+            System.out.println("3 - Sou Estoquista");
             System.out.println("0 - Sair");
             System.out.print("Escolha seu perfil: ");
             perfil = in.nextInt();
@@ -33,10 +36,12 @@ public class MenuPet {
             switch(perfil) {
                 case 1: menuBalconista(); break;
                 case 2: menuVeterinario(); break;
+                case 3: menuEstoquista(); break;
                 case 0: 
                     System.out.println("Salvando dados e encerrando...");
-                    GerenciarArquivos.salvarDados(lista);
-                    GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
+                    GerenciarArquivos.salvar("animais.dat", lista);
+                    GerenciarArquivos.salvar("veterinarios.dat", listaVeterinarios);
+                    GerenciarArquivos.salvar("produtos.dat", produtos);
                     break;
                 default: System.out.println("Opção inválida!");
             }
@@ -47,27 +52,45 @@ public class MenuPet {
     private void menuBalconista() {
         int opcao;
         do {
+            System.out.println("--------------------------------------------");
             System.out.println("\n--- MENU BALCONISTA (LOGÍSTICA) ---");
             System.out.println("1 - Criar cadastro de Pet");
             System.out.println("2 - Cadastrar Funcionário (Vet)");
             System.out.println("3 - Agendar Consulta");
+            System.out.println("4 - Ver animais cadastrados");
+            System.out.println("5 - Editar animais cadastrados");
             System.out.println("0 - Voltar");
             System.out.print("Opção: ");
             opcao = in.nextInt();
             in.nextLine();
-
+            System.out.println("-----------------------------------------------------");
             switch(opcao) {
                 case 1:
                     Animal novo = criarAnimal();
                     if(novo != null) {
-                        lista = GerenciarArquivos.append(lista, novo);
+                        lista = GerenciarArquivos.append(lista, novo, Animal.class);
                         System.out.println("Pet cadastrado com sucesso!");
-                        GerenciarArquivos.salvarDados(lista);
+                        GerenciarArquivos.salvar("animais.dat",lista);
                     }
                     break;
                 case 2: menuCadastroFuncionario(); break;
                 case 3: agendarConsulta(); break;
-            }
+                case 4:
+                if(lista.length == 0){
+                        System.out.println("Nenhum animal cadastrado.");
+                        break;
+                    } else{
+                    for(Animal a: lista){
+                        a.mostrar();
+                        System.out.println("-----------------------------------------------------");
+                    }
+                } break;
+                case 5:
+                editarAnimal();
+                break;
+            } 
+            
+                
         } while(opcao != 0);
     }
 
@@ -94,6 +117,7 @@ public class MenuPet {
         Veterinario vetAtual = listaVeterinarios[index];
         int op;
         do {
+            System.out.println("--------------------------------------------");
             System.out.println("\n--- BEM-VINDO(A) DR(A). " + vetAtual.getNome().toUpperCase() + " ---");
             System.out.println("1 - Ver Agenda (Consultas)");
             System.out.println("2 - Iniciar Atendimento (Próximo da lista)");
@@ -101,13 +125,71 @@ public class MenuPet {
             System.out.print("Opção: ");
             op = in.nextInt();
             in.nextLine();
-
+System.out.println("--------------------------------------------");
             if (op == 1) {
                 vetAtual.mostrarAgenda();
             } else if (op == 2) {
                 atenderProximo(vetAtual);
             }
         } while (op != 0);
+    }
+
+    private void menuEstoquista(){
+        int opcao;
+        Estoquista estoquista = new Estoquista("Claudia", "Estoquista");
+        do{
+            System.out.println("--------------------------------------------");
+            System.out.println("\n--- MENU ESTOQUISTA ---");
+            System.out.println("1 - Adicionar produto");
+            System.out.println("2 - Ver produtos");
+            System.out.println("3 - Atualizar quantidade");
+            System.out.println("0 - Voltar");
+            System.out.print("Opção: ");
+            opcao = in.nextInt();
+            in.nextLine();
+System.out.println("--------------------------------------------");
+            switch(opcao){
+                case 1:
+                    Produto novoProduto = estoquista.adicionarProduto();
+                    Produto[] produtosSalvos = GerenciarArquivos.carregar("produtos.dat", Produto[].class);
+                    produtosSalvos = GerenciarArquivos.append(produtosSalvos, novoProduto, Produto.class);
+                    GerenciarArquivos.salvar("produtos.dat", produtosSalvos);
+                    break;
+                case 2:     
+                    Produto[] produtos = GerenciarArquivos.carregar("produtos.dat", Produto[].class);
+                    if(produtos.length == 0){
+                        System.out.println("Nenhum produto cadastrado.");
+                        break;
+                    } else{
+                        
+                    for(Produto p: produtos){
+                        p.mostrarDetalhes();
+                        System.out.println("--------------------------------------------");
+                    }
+                }
+                    break;
+                case 3:
+                    produtos = GerenciarArquivos.carregar("produtos.dat", Produto[].class);
+                    System.out.println("Digite a quantidade para retirar do estoque: ");
+                    int qtd = Integer.parseInt(System.console().readLine());  
+                    System.out.println("Digite o ID do produto: ");
+                    int id = Integer.parseInt(System.console().readLine());  
+
+                    for(Produto p: produtos){
+                        if(p.getID() == id && p.getQuantidade()>qtd){
+                            System.out.println("Quantidade retirada do estoque");
+                            estoquista.removerEstoque(qtd, p);
+                            GerenciarArquivos.salvar("produtos.dat", produtos);
+                            break;
+                        } else{
+                            System.out.println("Não foi possivel tirar do estoque");
+                        }
+                    }  
+                    break;
+                    
+                case 0: break;    
+            }
+        } while(opcao != 0);
     }
 
     private void atenderProximo(Veterinario vet) {
@@ -128,7 +210,7 @@ public class MenuPet {
         vet.consultas = novaAgenda;
 
         System.out.println("Atendimento finalizado com sucesso!");
-        GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
+        GerenciarArquivos.salvar("veterinarios.dat", Veterinario[].class);
     }
 
     
@@ -154,8 +236,8 @@ public class MenuPet {
         System.out.print("Especialidade: ");
         String espec = in.nextLine();
         Veterinario novoVet = new Veterinario(nome, espec, null);
-        listaVeterinarios = GerenciarArquivos.appendFunc(listaVeterinarios, novoVet);
-        GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
+        listaVeterinarios = GerenciarArquivos.append(listaVeterinarios, novoVet, Veterinario.class);
+        GerenciarArquivos.salvar("veterinarios.dat", listaVeterinarios);
         System.out.println("Veterinário cadastrado!");
     }
 
@@ -186,6 +268,83 @@ public class MenuPet {
 
         listaVeterinarios[vIndex].consultas = Consulta.appendConsultas(listaVeterinarios[vIndex].consultas, nova);
         System.out.println("Agendado com sucesso!");
-        GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
+    GerenciarArquivos.salvar("veterinarios.dat", listaVeterinarios);
     }
+ private void editarAnimal() {
+        System.out.print("Digite o ID do animal: ");
+        int id = in.nextInt();
+        in.nextLine();
+
+        Animal animal = buscarPorId(id);
+        if(animal == null) {
+            System.out.println("Animal não encontrado!");
+            return;
+        }
+
+        animal.mostrar();
+
+        int op;
+        do {
+            System.out.println("\nO que deseja editar?");
+            System.out.println("1 - Nome");
+            System.out.println("2 - Espécie");
+            System.out.println("0 - Voltar");
+            System.out.print("Opção: ");
+
+            op = in.nextInt();
+            in.nextLine();
+
+            switch (op) {
+                case 1:
+                    System.out.print("Novo nome: ");
+                    animal.setNome(in.nextLine());
+                    System.out.println("\nAnimal atualizado!");
+                    animal.mostrar(); // Mostra cadastro atualizado
+                    break;
+
+                case 2:
+                    System.out.println("\nEscolha nova espécie:");
+                    System.out.println("1 - Cachorro");
+                    System.out.println("2 - Gato");
+                    System.out.println("3 - Coelho");
+                    System.out.println("4 - Outro");
+                    System.out.print("Opção: ");
+
+                    int esp = in.nextInt();
+                    in.nextLine();
+
+                    switch (esp) {
+                        case 1: animal.setEspecie("Cachorro"); break;
+                        case 2: animal.setEspecie("Gato"); break;
+                        case 3: animal.setEspecie("Coelho"); break;
+                        case 4:
+                            System.out.print("Digite a espécie: ");
+                            animal.setEspecie(in.nextLine());
+                            break;
+                        default:
+                            System.out.println("Opção inválida! Espécie não alterada.");
+                    }
+
+                    System.out.println("\nAnimal atualizado!");
+                    animal.mostrar(); // Mostra cadastro atualizado
+                    break;
+
+                case 0:
+                    System.out.println("Voltando...");
+                    break;
+
+                default:
+                    System.out.println("Opção inválida!");
+            }
+
+        } while (op != 0);
+    }
+
+        private Animal buscarPorId(int id) {
+        for(Animal a : lista) {
+            if(a.getId() == id) return a;
+        }
+        return null;
+    }
+
 }

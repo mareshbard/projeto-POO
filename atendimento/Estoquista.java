@@ -5,7 +5,9 @@ public class Estoquista extends Funcionario {
     public Estoquista(String nome, String funcao) {
         super(nome, funcao);
     }
-    public void adicionarProduto() {
+    public Produto adicionarProduto() {
+        System.out.println("ID: ");
+        int id = Integer.parseInt(System.console().readLine());
         System.out.print("Nome do Produto: ");
         String nome = System.console().readLine();
         System.out.print("Descrição do Produto: ");
@@ -14,7 +16,12 @@ public class Estoquista extends Funcionario {
         double preco = Double.parseDouble(System.console().readLine());
         System.out.println("Quantidade em Estoque: ");
         int quantidade = Integer.parseInt(System.console().readLine());
-        Produto novoProduto = new Produto(nome, descricao, preco, quantidade);
-        System.out.println("Estoue adicionado com sucesso!");
+        Produto novoProduto = new Produto(nome, descricao, preco, quantidade, id);
+        System.out.println("Produto adicionado com sucesso!");
+        
+        return novoProduto;
     }   
+        public void removerEstoque(int qtd, Produto p){
+        p.setQuantidade(p.getQuantidade() - qtd);
+    }
 }
