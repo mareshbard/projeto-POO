@@ -4,17 +4,16 @@
 ## 🐰 CHECKLIST:
 
 - Criar menus
-    - Menu para adicionar, remover, editar, ver pets ☑️
-    - Menu de atendimento (vacinação, consulta regular)
-    - Menu CRUD para funcionários
-- Fazer funções dos funcionários
-    - Iniciar atendimento
-    - Fazer consulta
-    - Aplicar vacinas
+    - Menu para adicionar, editar, ver pets ☑️
+    - Menu de atendimento (vacinação, consulta regular) ☑️
+- Fazer funções dos funcionários ☑️
+    - Iniciar atendimento ☑️
+    - Fazer consulta ☑️
+    - Aplicar vacinas ☑️
+    - Gerenciar estoque ☑️
 - Fazer funções dos animais ☑️
     - Criar animais ☑️
-    - Editar nome, cor ☑️
-    - Excluir ☑️
+    - Editar nome, espécie ☑️
     - Ver por ID ☑️
 - Adicionar funções para salvar animais cadastrados em arquivos ☑️
 - Adicionar funções para salvar funcionários cadastrados em arquivos ☑️
@@ -28,6 +27,7 @@
 - Encapsulamento
 - Exceções
 - Manipulação de arquivos
+- Generics
 
 ## 🐠 EQUIPE:
 
