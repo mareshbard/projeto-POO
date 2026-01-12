@@ -62,6 +62,7 @@ public class MenuPet {
                     if(novo != null) {
                         lista = GerenciarArquivos.append(lista, novo);
                         System.out.println("Pet cadastrado com sucesso!");
+                        GerenciarArquivos.salvarDados(lista);
                     }
                     break;
                 case 2: menuCadastroFuncionario(); break;
@@ -185,5 +186,6 @@ public class MenuPet {
 
         listaVeterinarios[vIndex].consultas = Consulta.appendConsultas(listaVeterinarios[vIndex].consultas, nova);
         System.out.println("Agendado com sucesso!");
+        GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
     }
 }
