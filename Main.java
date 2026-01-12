@@ -1,12 +1,4 @@
 
-		
-
-import classes.*;
-import atendimento.*;
-import database.*;
-import java.util.*;
-import java.io.File;
-import java.io.IOException;
 
 public class Main
 {

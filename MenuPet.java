@@ -10,7 +10,7 @@ public class MenuPet {
     Animal[] lista = GerenciarArquivos.carregarAnimais();
     
     public Scanner in = new Scanner(System.in);
-    private int idAuto = 1;
+    private int idAuto = lista.length;
 
     public void iniciar() {
         if(listaVeterinarios == null || listaVeterinarios.length == 0){
@@ -154,6 +154,7 @@ public class MenuPet {
         String espec = in.nextLine();
         Veterinario novoVet = new Veterinario(nome, espec, null);
         listaVeterinarios = GerenciarArquivos.appendFunc(listaVeterinarios, novoVet);
+        GerenciarArquivos.salvarVeterinarios(listaVeterinarios);
         System.out.println("Veterinário cadastrado!");
     }
 
